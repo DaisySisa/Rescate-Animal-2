@@ -1,36 +1,47 @@
-## Sistema de Control de Rescate y Adopción Animal
+# 🐾 Sistema de Gestión de Casos - Refugio Animal
 
-### 1. Patrón Singleton
+Sistema integral diseñado para centralizar, organizar y dar seguimiento en tiempo real a los casos de rescate, atención veterinaria y procesos de adopción de animales en un refugio.
 
-Propósito: garantizar que exista una única instancia del gestor central de casos.
+---
 
-Aplicación: se utilizará en la clase GestorCasos para centralizar la administración de los registros de rescate y evitar la creación de múltiples gestores independientes.
+## 📋 Descripción del Problema y Alcance
 
-### 2. Patrón Observer
+Los refugios animales suelen gestionar reportes de rescate mediante canales dispersos, lo que dificulta el seguimiento clínico y la coordinación entre el personal. Este proyecto resuelve dicha problemática mediante una arquitectura modular que controla el ciclo de vida completo de cada animal desde su ingreso hasta su adopción.
 
-Propósito: establecer un mecanismo de notificaciones automáticas entre los componentes del sistema.
+### 👥 Actores del Sistema
+* **Ciudadano / Reportante:** Registra alertas de animales en situación de riesgo o abandono.
+* **Voluntario / Veterinario:** Recibe notificaciones de nuevos casos, actualiza diagnósticos médicos y gestiona el estado de recuperación.
+* **Administrador del Refugio:** Supervisa la operatividad general, asigna personal a los casos y autoriza los procesos de adopción.
 
-Aplicación: cuando se registre un nuevo caso de rescate, el sistema notificará a los voluntarios y responsables correspondientes para que puedan conocer y atender el caso.
+### ⚙️ Requerimientos Funcionales Principales
+1. **Registro de Casos:** Creación de expedientes con ubicación, estado inicial y evidencia del rescate.
+2. **Categorización por Especies:** Clasificación estructurada para **Perros**, **Gatos** y **Fauna Silvestre**, adaptando los protocolos de atención según la especie.
+3. **Asignación de Personal:** Vinculación directa de veterinarios y voluntarios responsables por cada caso activo.
+4. **Control de Estados:** Trazabilidad completa a través de las etapas: `Rescatado` ➔ `En Tratamiento` ➔ `En Adopción` ➔ `Adoptado`.
 
-### 3. Patrón Factory Method
+---
 
-Propósito: facilitar la creación de objetos sin depender directamente de sus clases concretas.
+## 🏗️ Arquitectura y Patrones de Diseño
 
-Aplicación: la clase ExpedienteFactory permitirá generar expedientes específicos según la especie del animal, como perro, gato o fauna silvestre.
+El sistema está estructurado bajo el patrón arquitectónico **MVC (Modelo-Vista-Controlador)** e implementa tres patrones de diseño clásicos de ingeniería de software para garantizar escalabilidad, bajo acoplamiento y mantenibilidad:
 
-### 4. Patrón MVC
+| Patrón de Diseño | Ubicación en el Código | Justificación Técnica y Función |
+| :--- | :--- | :--- |
+| **Singleton** | `src/config/DatabaseConnection.js` | Garantiza una única instancia centralizada de conexión hacia el motor de almacenamiento de expedientes, evitando duplicidad de registros y conflictos de concurrencia. |
+| **Factory Method** | `src/factories/ExpedienteFactory.js` | Encapsula la lógica de instanciación polimórfica para crear expedientes especializados (Perro, Gato, Fauna Silvestre) con sus propios requisitos clínicos sin acoplar el código cliente. |
+| **Observer** | `src/observers/NotificadorVoluntarios.js` | Implementa un mecanismo reactivo de suscripción que alerta automáticamente a los voluntarios y veterinarios disponibles cada vez que se registra un nuevo rescate o cambia un estado crítico. |
 
-Propósito: separar la interfaz, el procesamiento de las solicitudes y la gestión de los datos.
+---
 
-Aplicación:
-- Modelo: administra los datos y las reglas del sistema.
-- Vista: presenta la información al usuario.
-- Controlador: recibe las solicitudes y coordina las operaciones.
+## 📂 Estructura del Proyecto
 
-### 5. Justificación de los patrones
-
-La implementación de estos patrones permitirá organizar mejor el sistema, reducir el acoplamiento entre sus componentes, facilitar el mantenimiento y permitir futuras ampliaciones sin modificar toda la estructura del software.
-
-### 6. Conclusión
-
-Los patrones de diseño seleccionados contribuyen a desarrollar una arquitectura más ordenada, reutilizable y escalable, facilitando la gestión de los procesos de rescate y adopción animal.
+```text
+Rescate-Animal-2/
+├── docs/                  # Documentación técnica y diagramas UML (Casos de uso, Clases, Secuencia)
+├── src/
+│   ├── config/            # Configuración global e instancia única (Singleton)
+│   ├── controllers/       # Lógica de control y flujo de peticiones (MVC)
+│   ├── factories/         # Fábricas de creación de expedientes por especie (Factory Method)
+│   ├── models/            # Entidades del dominio (Animal, Expediente, Usuario)
+│   └── observers/         # Gestión de eventos y alertas automáticas (Observer)
+└── README.md              # Documentación principal del repositorio
